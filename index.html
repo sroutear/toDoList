@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"></script> -->
+    <script src="js/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div id="app"> <!--HTML DOM template-->
+        <div id="listWrap">
+            <h1>To-Do List</h1>
+            <p>Today is {{selectedYear}}/{{selectedMonth}}/{{selectedDay}}</p>
+            <input id="add-wrap" type="text" v-model="newTask" @keyup.13="addTask" placeholder="What needs to be done?">
+            <button id="addBtn" @click="addTask">Add</button>
+
+            <ul>
+                <li v-for="(task,index) in tasks" @click="removeTask(index)">{{task}}</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app', 
+            data: {   //變數存放的地方
+                tasks: [],
+                newTask: '',
+                selectedYear: new Date().getFullYear(),
+                selectedMonth: new Date().getMonth() + 1, //取得月份從 0 開始算起,故 +1
+                selectedDay: new Date().getDate(),
+            },  
+            methods: { //函數放這裡
+                addTask(){
+                    // 使用jQuery的 $.inArray(value, array) --->在該陣列中找不到的話會回傳 -1
+                    // 1.如果原陣列中沒有[某項目],則新增[某項目]
+                    // 2.清空input
+                    if($.inArray(this.newTask,this.tasks) == -1){
+                        this.tasks.push(this.newTask);
+                        this.newTask = '';
+                    }                    
+                },
+
+                removeTask(index){
+                    // console.log(this.tasks.indexOf(task));
+                    // 語法: 某陣列.splice(index,刪除的筆數);  //刪除陣列的值
+                    // 語法: 某陣列.splice(index,刪除的筆數,100,200,300);  //也可以新增
+                    // 1
+                    // this.tasks.splice(this.tasks.indexOf(task),1);
+
+                    // 2
+                    this.tasks.splice(index,1);
+                },
+            },
+            computed: {//也是放函數，放在這裡的函數，不能傳參數，一定要有傳回值(return)
+                
+            },
+        });
+    </script>
+</body>
+</html>
